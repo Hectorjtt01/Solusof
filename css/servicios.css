@@ -1,0 +1,276 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6); /* Fondo oscuro con más opacidad */
+}
+
+.modal-content {
+  background-color: #fff; /* Fondo blanco */
+  margin: auto;
+  padding: 30px 30px 50px 30px; /* Más padding para mejor espaciado */
+  border: 1px solid #ccc;
+  width: 80%; /* Ajusta el ancho */
+  max-width: 900px; /* Ajusta el ancho máximo */
+  border-radius: 12px; /* Bordes más redondeados */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra más pronunciada */
+  position: relative;
+  text-align: left; /* Alineación del texto a la izquierda */
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center; /* Centrar el título */
+}
+
+.input-group {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.input-group label {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+.input-group input[type="text"],
+.input-group input[type="date"],
+.input-group select {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.input-group input[type="checkbox"] {
+  margin-left: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table th, .table td {
+  text-align: center;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 16px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-container button {
+  padding: 8px 12px;
+}
+
+.btn-edit, .btn-delete {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.material-icons-outlined {
+  font-size: 18px;
+
+}
+
+.btn-edit .material-icons-outlined {
+  color: #28a745;
+}
+
+.btn-delete .material-icons-outlined {
+  color: #dc3545;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: row;
+}
+
+form {
+  flex: 1; /* Ajustar la flexibilidad para ocupar más espacio */
+}
+
+.service-products {
+  flex: 1;
+  margin-left: 20px;
+  padding: 20px; /* Ajustar el padding */
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-align-right {
+  display: block;
+  margin-left: auto;
+  margin-right: 20px; /* Ajusta este valor para mover el botón */
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #007BFF; /* Borde azul al enfocar */
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Color azul */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.3s;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+.btn:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+  transform: scale(1.05); /* Aumentar tamaño al pasar el ratón */
+}
+
+.search-container input:focus {
+  border-color: #007BFF; /* Borde azul al enfocar */
+}
+
+
+/* Estilos para el textarea en el modal de añadir para Revisión */
+#addServiceModal .revision-comments textarea {
+  display: block;
+  width: 455px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+/* Estilos para el textarea en el modal de añadir para Desinstalación */
+#addServiceModal .desinstalacion-comments textarea {
+  display: block;
+  width: 280px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+/* Estilos para el textarea en el modal de editar para Revisión */
+#editServiceModal .revision-comments textarea {
+  display: block;
+  width: 600px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+/* Estilos para el textarea en el modal de editar para Desinstalación */
+#editServiceModal .desinstalacion-comments textarea {
+  display: block;
+  width: 600px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  margin-bottom: 0; /* Asegura que no haya margen inferior */
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+}
+
+.product-item label {
+  font-weight: normal; /* Asegura que las etiquetas de los productos no estén en negrita */
+}
+
+.revision-comments {
+  margin-top: 25px; /* Elimina el margen superior del apartado de comentarios */
+}
+
+.revision-comments textarea {
+  margin-top: 0px; /* Ajusta el margen superior del textarea si es necesario */
+}
+
+.input-group:last-child {
+  margin-bottom: 0; /* Asegura que el último grupo de entrada no tenga margen inferior */
+}
+

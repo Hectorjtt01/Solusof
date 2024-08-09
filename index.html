@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index Form</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script>
+    // Tu configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyDPUfGiWPJnCAwyOhTCduOoHRFMj2_eQD8",
+        authDomain: "solusof-32a69.firebaseapp.com",
+        projectId: "solusof-32a69",
+        storageBucket: "solusof-32a69.appspot.com",
+        messagingSenderId: "851917880194",
+        appId: "1:851917880194:web:25f490a6d09abb8f446d9b",
+        measurementId: "G-LR1FM9V1B3"
+    };
+
+    // Inicializa Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body>
+  <div class="wrapper" id="container">
+    <form id="index-form">
+      <h1>index</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Username" required>
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Password" required>
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+      <div id="error-message" class="error-message">Correo o contraseña incorrectos</div> <!-- Mensaje de error -->
+      <button type="submit" class="btn" id="index">index</button>
+      <div class="register-link">
+      </div>
+    </form>
+  </div> 
+  <script src="./js/index.js"></script>
+</body>
+</html>

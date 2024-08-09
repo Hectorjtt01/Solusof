@@ -1,0 +1,291 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+}
+
+.modal-content {
+  background-color: #fff; /* Fondo blanco */
+  margin: auto;
+  padding: 30px 30px 50px 30px; /* Padding para mejor espaciado */
+  border: 1px solid #ccc;
+  width: 80%; /* Ancho del modal */
+  max-width: 900px; /* Ancho máximo */
+  border-radius: 12px; /* Bordes redondeados */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra */
+  position: relative;
+}
+
+.close-folio {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.close-folio:hover,
+.close-folio:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center; /* Centrar el título */
+}
+
+.input-group {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.input-group label {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group input[type="date"],
+.input-group select {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.input-group input[type="checkbox"] {
+  margin-left: 0;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.product-list {
+  margin-top: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.table th, .table td {
+  text-align: center;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Color azul */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 16px;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+  transform: scale(1.05);
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-container button {
+  padding: 8px 12px;
+}
+
+.btn-edit, .btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.btn-edit .material-icons-outlined {
+  color: green;
+}
+
+.btn-delete .material-icons-outlined {
+  color: red;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+textarea:focus {
+  border-color: #007BFF; /* Borde azul al enfocar */
+}
+
+.btn-align-right {
+  display: block;
+  margin-left: auto;
+  margin-right: 20px; /* Ajusta este valor para mover el botón */
+}
+
+.revision-comments {
+  margin-top: 25px; /* Elimina el margen superior del apartado de comentarios */
+}
+
+.revision-comments textarea {
+  margin-top: 0px; /* Ajusta el margen superior del textarea si es necesario */
+}
+
+.input-group:last-child {
+  margin-bottom: 0; /* Asegura que el último grupo de entrada no tenga margen inferior */
+}
+
+/* Estilos para los botones de "No Folio" */
+.btn-folio {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  outline: inherit;
+  text-decoration: underline; /* Opcional, para indicar que es editable */
+}
+
+/* Estilos para el input de "Fecha Factura" */
+input[type="date"] {
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Estilos adicionales para el hover o focus, si es necesario */
+input[type="date"]:hover,
+input[type="date"]:focus,
+.btn-folio:hover,
+.btn-folio:focus {
+  text-decoration: underline; /* Opcional, para indicar interactividad */
+}
+
+/* Estilos generales de la tabla */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table td button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.table td input[type="date"] {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-container button {
+  padding: 10px 10px;
+  margin: 0 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 16px;
+}
+
+.filter-container button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Estilos para los productos en el modal */
+.product-item {
+  display: block;
+  margin-bottom: 10px; /* Espacio entre cada producto */
+}
+
+.product-item p {
+  margin: 10px;
+  white-space: pre-wrap; /* Asegura que los saltos de línea se respeten */
+}
+
+

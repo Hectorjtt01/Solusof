@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>VoBo - Admin Dashboard</title>
+
+  <!-- Open Sans Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/vobo.css">
+  
+</head>
+<body>
+  <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined">search</span>
+          <input type="text" id="searchInput" placeholder="Buscar...">
+        </div>
+        <div class="header-right">
+          <span class="material-icons-outlined">notifications</span>
+          <span class="material-icons-outlined">email</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      </header>
+      <!-- End Header -->
+
+   <!-- Sidebar -->
+   <aside id="sidebar">
+    <div class="sidebar-title">
+      <div class="sidebar-brand">
+        <img src="/img/Captura_de_pantalla_2024-07-10_a_la_s__1.26.10_p.m.-removebg-preview.png" alt="" id="soluimg">
+      </div>
+      <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
+
+    <ul class="sidebar-list">
+      <li class="sidebar-list-item" id="sidebar-home">
+        <a href="dashboard.html">
+          <span class="material-icons-outlined">home</span> Inicio
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-users">
+        <a href="Usuarios.html">
+          <span class="material-icons-outlined">people</span> Usuarios
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-technicians">
+        <a href="Tecnicos.html">
+          <span class="material-icons-outlined">engineering</span> Técnicos
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-products">
+        <a href="Productos.html">
+          <span class="material-icons-outlined">storefront</span> Productos
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-service-types">
+        <a href="TipoServicios.html">
+          <span class="material-icons-outlined">settings</span> Tipo Servicios
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-services">
+        <a href="Servicios.html">
+          <span class="material-icons-outlined">build</span> Servicios
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-vobo">
+        <a href="Vobo.html">
+          <span class="material-icons-outlined">done</span> VoBo
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-invoicing">
+        <a href="Facturacion.html">
+          <span class="material-icons-outlined">receipt_long</span> Facturación
+        </a>
+      </li>
+      <li class="sidebar-list-item" id="sidebar-logout">
+        <a href="/index.html">
+          <span class="material-icons-outlined">logout</span> Cerrar Sesion
+        </a>
+      </li>
+    </ul>
+  </aside>
+  <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+      <div class="main-title">
+        <h2>VoBo</h2>
+      </div>
+      
+      <div class="filter-container">
+        <button id="showFaltantes">Faltantes</button>
+        <button id="showCompletados">Completados</button>
+      </div>
+
+      <div class="main-content">
+        <table id="voboTable" class="table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Placa</th>
+              <th>IMEI</th>
+              <th>Servicio</th>
+              <th>Tipo de Servicio</th>
+              <th>Coordinó</th>
+              <th>Total</th>
+              <th>Acciones</th>
+              <th>Finalizado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se agregarán los servicios dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <!-- End Main -->
+
+  </div>
+
+  <!-- Modal para editar servicio -->
+  <div id="editServiceModal" class="modal">
+    <div class="modal-content">
+      <span class="close-edit">&times;</span>
+      <h2 class="modal-title">Finalizar Servicio</h2>
+      <form id="editServiceForm">
+        <input type="hidden" id="editServiceId" name="editServiceId">
+        <div id="productsContainer" class="product-list"></div>
+        <strong>Total: $<span id="totalPrice">0</span></strong>
+        <div id="commentsContainer" class="input-group"></div> <!-- Contenedor para comentarios -->
+        <div id="finalizedContainer" class="input-group"></div> <!-- Contenedor para finalizado -->
+        <div class="button-container">
+          <button type="submit" class="btn">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/vobo.js"></script> <!-- Archivo JS para la página VoBo -->
+  <script src="/js/roles.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/search.js"></script>
+
+</body>
+</html>
