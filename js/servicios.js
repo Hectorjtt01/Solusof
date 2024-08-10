@@ -8,7 +8,7 @@ btn.onclick = function() {
   modal.style.display = "block";
   loadDropdowns();
   loadServiceTypesDropdown(); // Cargar tipos de servicio
-}
+} 
 
 span.onclick = function() {
   modal.style.display = "none";

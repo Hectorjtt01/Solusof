@@ -75,6 +75,11 @@ form.addEventListener("submit", function(event) {
   const name = document.getElementById("userName").value;
   const email = document.getElementById("userEmail").value;
   const password = document.getElementById("userPassword").value;
+  const role = document.getElementById("userRole").value; // Obtener el rol seleccionado
+
+  // Ocultar mensajes de error previos
+  document.getElementById("emailError").style.display = "none";
+  document.getElementById("passwordError").style.display = "none";
 
   // Añadir el usuario a Firebase Authentication y Firestore
   firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -82,17 +87,17 @@ form.addEventListener("submit", function(event) {
       const user = userCredential.user;
       const uid = user.uid;
 
-      // Asignar el rol de 'soporte' por defecto en Firestore
+      // Guardar el usuario con el rol en Firestore
       const userDocRef = db.collection("users").doc(uid);
       userDocRef.set({
         name: name,
         email: email,
-        role: 'soporte' // Asignar el rol de soporte por defecto
+        role: role // Guardar el rol seleccionado
       }).then(() => {
-        // Añadir el usuario a la tabla
-        addUserToTable(uid, name, email);
         // Cerrar el modal
         modal.style.display = "none";
+        // Refrescar la página para mostrar los cambios
+        window.location.reload(); 
       }).catch((error) => {
         console.error("Error al asignar rol: ", error);
       });
@@ -100,7 +105,16 @@ form.addEventListener("submit", function(event) {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.error("Error:", errorCode, errorMessage);
+
+      if (errorCode === 'auth/email-already-in-use') {
+        document.getElementById("emailError").innerText = "El correo ya está en uso.";
+        document.getElementById("emailError").style.display = "block";
+      } else if (errorCode === 'auth/weak-password') {
+        document.getElementById("passwordError").innerText = "La contraseña es muy débil. Debe tener al menos 6 caracteres.";
+        document.getElementById("passwordError").style.display = "block";
+      } else {
+        console.error("Error:", errorCode, errorMessage);
+      }
     });
 });
 
@@ -114,6 +128,7 @@ editForm.addEventListener("submit", function(event) {
   const name = document.getElementById("editUserName").value;
   const email = document.getElementById("editUserEmail").value;
   const password = document.getElementById("editUserPassword").value;
+  const role = document.getElementById("editUserRole").value; // Obtener el rol actualizado
 
   // Actualizar el correo electrónico y la contraseña en Firebase Authentication
   const user = firebase.auth().currentUser;
@@ -135,12 +150,13 @@ editForm.addEventListener("submit", function(event) {
       // Actualizar la información del usuario en Firestore
       return db.collection("users").doc(uid).update({
         name: name,
-        email: email
+        email: email,
+        role: role
       }).then(() => {
-        // Actualizar la información del usuario en la tabla
-        updateUserInTable(uid, name, email);
         // Cerrar el modal
         editModal.style.display = "none";
+        // Refrescar la página para mostrar los cambios
+        window.location.reload();
       }).catch((error) => {
         console.error("Error al actualizar el usuario en Firestore: ", error);
       });
@@ -151,27 +167,29 @@ editForm.addEventListener("submit", function(event) {
     // Actualizar la información del usuario en Firestore
     db.collection("users").doc(uid).update({
       name: name,
-      email: email
+      email: email,
+      role: role
     }).then(() => {
-      // Actualizar la información del usuario en la tabla
-      updateUserInTable(uid, name, email);
       // Cerrar el modal
       editModal.style.display = "none";
+      // Refrescar la página para mostrar los cambios
+      window.location.reload();
     }).catch((error) => {
       console.error("Error al actualizar el usuario: ", error);
     });
   }
 });
 
-// Función para añadir un usuario a la tabla
-function addUserToTable(uid, name, email) {
+
+function addUserToTable(uid, name, email, role) {
   const table = document.getElementById("usersTable").getElementsByTagName("tbody")[0];
   const newRow = table.insertRow();
   newRow.setAttribute('data-uid', uid); // Añade el ID del usuario como un atributo de datos
   newRow.insertCell(0).innerText = table.rows.length;
   newRow.insertCell(1).innerText = name;
   newRow.insertCell(2).innerText = email;
-  const actionsCell = newRow.insertCell(3);
+  newRow.insertCell(3).innerText = role; // Mostrar el rol del usuario
+  const actionsCell = newRow.insertCell(4);
   const editButton = document.createElement('button');
   editButton.className = 'btn-edit';
   const editIcon = document.createElement('span');
@@ -194,6 +212,7 @@ function addUserToTable(uid, name, email) {
   actionsCell.appendChild(deleteButton);
 }
 
+
 // Función para abrir el modal de edición con la información del usuario
 function openEditModal(uid) {
   db.collection("users").doc(uid).get().then((doc) => {
@@ -202,12 +221,14 @@ function openEditModal(uid) {
       document.getElementById("editUserId").value = uid;
       document.getElementById("editUserName").value = user.name;
       document.getElementById("editUserEmail").value = user.email;
+      document.getElementById("editUserRole").value = user.role; // Llenar con el valor actual del rol
       editModal.style.display = "block";
     }
   }).catch((error) => {
     console.error("Error al obtener el usuario: ", error);
   });
 }
+
 
 // Función para actualizar la información del usuario en la tabla
 function updateUserInTable(uid, name, email) {
@@ -229,13 +250,14 @@ function loadUsers() {
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         const user = doc.data();
-        addUserToTable(doc.id, user.name, user.email); // Pasa el ID del documento
+        addUserToTable(doc.id, user.name, user.email, user.role); // Pasa el rol del usuario
       });
     })
     .catch((error) => {
       console.error("Error al obtener los usuarios:", error);
     });
 }
+
 
 // Función para eliminar un usuario de Firebase Authentication y Firestore
 function deleteUser(uid, row) {

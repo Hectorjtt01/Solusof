@@ -4,8 +4,15 @@ const addBtn = document.getElementById("addTechnicianBtn");
 const addSpan = document.getElementsByClassName("close")[0];
 
 addBtn.onclick = function() {
+  // Limpiar los campos del formulario
+  document.getElementById("technicianName").value = "";
+  document.getElementById("technicianPhone").value = "";
+  document.getElementById("technicianZone").value = "";
+
+  // Mostrar el modal
   addModal.style.display = "block";
 }
+
 
 addSpan.onclick = function() {
   addModal.style.display = "none";

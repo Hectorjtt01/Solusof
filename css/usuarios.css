@@ -1,3 +1,4 @@
+/* Modal y contenido */
 .modal {
   display: none;
   position: fixed;
@@ -8,7 +9,6 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
 }
 
@@ -36,6 +36,7 @@
   cursor: pointer;
 }
 
+/* Estilos de grupo de entrada */
 .input-group {
   margin: 10px 0;
 }
@@ -43,14 +44,48 @@
 .input-group label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.input-group input {
+.input-group input, 
+.input-group select {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
 }
 
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #007BFF; /* Borde azul al enfocar */
+}
+
+.input-group select {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Botón de envío */
+.btn {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Color azul */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.3s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+  transform: scale(1.05); /* Aumentar tamaño al pasar el ratón */
+}
+
+/* Tabla de usuarios */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -80,43 +115,6 @@
   text-align: center;
 }
 
-.btn {
-  padding: 8px 12px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #45a049;
-}
-
-.search-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
-.search-container input {
-  padding: 8px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.search-container button {
-  padding: 8px 12px;
-}
-
-
-
-
-
-
-
 /* Botones de acción */
 .btn-edit, .btn-delete {
   background: none;
@@ -133,70 +131,40 @@
   color: red;
 }
 
-/* Re-auth Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  padding-top: 100px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+/* Estilos adicionales para campos de búsqueda y enfoque */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 10px;
-}
-
-.close-reauth {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close-reauth:hover,
-.close-reauth:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
-
-.input-group input:focus,
-.input-group select:focus {
-  border-color: #007BFF; /* Borde azul al enfocar */
-}
-
-.btn {
-  padding: 10px 20px;
-  background-color: #007BFF; /* Color azul */
-  color: white;
-  border: none;
-  cursor: pointer;
+.search-container input {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  transition: background-color 0.3s, transform 0.3s;
-  display: inline-flex;
-  align-items: center;
-}
-
-
-.btn:hover {
-  background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
-  transform: scale(1.05); /* Aumentar tamaño al pasar el ratón */
+  transition: border-color 0.3s;
 }
 
 .search-container input:focus {
   border-color: #007BFF; /* Borde azul al enfocar */
 }
+
+.search-container button {
+  padding: 8px 12px;
+}
+
+#passwordError {
+  color: red;
+  margin-bottom: 10px; /* Ajusta este valor según sea necesario */
+  display: none; /* Para que no se muestre hasta que haya un error */
+}
+
+#emailError {
+  color: red;
+  margin-bottom: 10px; /* Ajusta este valor según sea necesario */
+  display: none;
+}
+
+
+

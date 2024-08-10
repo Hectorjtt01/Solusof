@@ -62,18 +62,38 @@ function updateActiveUsers() {
   const user = firebase.auth().currentUser;
   if (user) {
     const userId = user.uid;
-    db.collection("activeUsers").doc(userId).set({
-      uid: userId,
-      lastActive: firebase.firestore.FieldValue.serverTimestamp()
-    }).catch((error) => {
-      console.error("Error al actualizar usuario activo: ", error);
-    });
 
-    // Remover usuario de la colección de usuarios activos al desconectarse
-    window.addEventListener("beforeunload", function() {
-      db.collection("activeUsers").doc(userId).delete().catch((error) => {
-        console.error("Error al remover usuario activo: ", error);
-      });
+    // Obtener el nombre del usuario desde la colección "users"
+    db.collection("users").doc(userId).get().then((doc) => {
+      if (doc.exists) {
+        const userName = doc.data().name;
+
+        // Guardar en la colección "activeUsers" con el campo "name"
+        db.collection("activeUsers").doc(userId).set({
+          uid: userId,
+          lastActive: firebase.firestore.FieldValue.serverTimestamp(),
+          name: userName  // Agregar el nombre aquí
+        }).catch((error) => {
+          console.error("Error al actualizar usuario activo: ", error);
+        });
+
+        // Remover usuario de la colección de usuarios activos al desconectarse
+        function handleUnload() {
+          db.collection("activeUsers").doc(userId).delete().catch((error) => {
+            console.error("Error al remover usuario activo: ", error);
+          });
+        }
+        window.addEventListener("beforeunload", handleUnload);
+
+        // Remover el evento al cerrar sesión para evitar duplicados
+        return function cleanup() {
+          window.removeEventListener("beforeunload", handleUnload);
+        };
+      } else {
+        console.error("El documento no existe en la colección 'users'");
+      }
+    }).catch((error) => {
+      console.error("Error al obtener el documento 'users': ", error);
     });
   }
 }
@@ -81,7 +101,7 @@ function updateActiveUsers() {
 // Verificar autenticación del usuario
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    updateActiveUsers();
+    const cleanup = updateActiveUsers();
     const uid = user.uid;
     const userDocRef = db.collection("users").doc(uid);
 
@@ -98,6 +118,18 @@ firebase.auth().onAuthStateChanged((user) => {
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
+
+    // Función para cerrar sesión
+    function signOutUser() {
+      if (cleanup) cleanup();  // Remueve el manejador de 'beforeunload' antes de cerrar sesión
+
+      firebase.auth().signOut().then(() => {
+        window.location.href = '/index.html';
+      }).catch((error) => {
+        console.error("Error al cerrar sesión: ", error);
+      });
+    }
+
   } else {
     // Redirigir al login si no está autenticado
     window.location.href = '/index.html';
