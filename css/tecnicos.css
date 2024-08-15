@@ -155,3 +155,9 @@
   border-color: #007BFF; /* Borde azul al enfocar */
 }
 
+/* Ajustar el área de texto de los comentarios */
+textarea {
+  width: 100%;
+  box-sizing: border-box; /* Esto asegura que el padding y el borde estén incluidos en el ancho total */
+  resize: vertical; /* Permitir que el usuario ajuste la altura del cuadro */
+}

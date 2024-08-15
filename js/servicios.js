@@ -8,7 +8,7 @@ btn.onclick = function() {
   modal.style.display = "block";
   loadDropdowns();
   loadServiceTypesDropdown(); // Cargar tipos de servicio
-} 
+}
 
 span.onclick = function() {
   modal.style.display = "none";
@@ -129,8 +129,8 @@ document.getElementById("serviceCategory").addEventListener("change", function()
   if (this.value === "Revisión") {
     const causaRevGroup = document.createElement("div");
     causaRevGroup.className = "input-group";
-    causaRevGroup.innerHTML = 
-      `<label for="causaRev">Causa Rev:</label>
+    causaRevGroup.innerHTML = `
+      <label for="causaRev">Causa Rev:</label>
       <select id="causaRev" name="causaRev">
         <option value="Revisión General">Revisión General</option>
         <option value="Falla accesorio">Falla accesorio</option>
@@ -141,8 +141,8 @@ document.getElementById("serviceCategory").addEventListener("change", function()
 
     const commentsGroup = document.createElement("div");
     commentsGroup.className = "input-group revision-comments";
-    commentsGroup.innerHTML = 
-      `<label for="comments">Comentarios:</label>
+    commentsGroup.innerHTML = `
+      <label for="comments">Comentarios:</label>
       <textarea id="comments" name="comments" rows="4"></textarea>`;
     commentsField.appendChild(commentsGroup);
 
@@ -154,8 +154,8 @@ document.getElementById("serviceCategory").addEventListener("change", function()
       products.forEach(product => {
         const productItem = document.createElement("div");
         productItem.className = "product-item";
-        productItem.innerHTML = 
-          `<input type="checkbox" id="product_${product.id}" name="products" value="${product.id}">
+        productItem.innerHTML = `
+          <input type="checkbox" id="product_${product.id}" name="products" value="${product.id}">
           <label for="product_${product.id}">${product.name}</label>`;
         productList.appendChild(productItem);
       });
@@ -166,8 +166,8 @@ document.getElementById("serviceCategory").addEventListener("change", function()
   } else if (this.value === "Desinstalación") {
     const causaDesGroup = document.createElement("div");
     causaDesGroup.className = "input-group";
-    causaDesGroup.innerHTML = 
-      `<label for="causaDes">Causa Des:</label>
+    causaDesGroup.innerHTML = `
+      <label for="causaDes">Causa Des:</label>
       <select id="causaDes" name="causaDes">
         <option value="Cambio equipo unidad">Cambio equipo unidad</option>
         <option value="Venta unidad">Venta unidad</option>
@@ -179,8 +179,8 @@ document.getElementById("serviceCategory").addEventListener("change", function()
 
     const commentsGroup = document.createElement("div");
     commentsGroup.className = "input-group desinstalacion-comments";
-    commentsGroup.innerHTML = 
-      `<label for="commentsDes">Comentarios:</label>
+    commentsGroup.innerHTML = `
+      <label for="commentsDes">Comentarios:</label>
       <textarea id="commentsDes" name="commentsDes" rows="4"></textarea>`;
     commentsField.appendChild(commentsGroup);
   }
@@ -202,12 +202,14 @@ const form = document.getElementById("addServiceForm");
 form.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  const serviceCategory = document.getElementById("serviceCategory").value;
   const serviceType = document.getElementById("serviceType").value;
   const sopAttended = document.getElementById("sopAttended").value;
   const technician = document.getElementById("technician").value;
+  const equipment = document.getElementById("equipment").value;
   const userReport = document.getElementById("userReport").value;
   const coordinated = document.getElementById("coordinated").value;
+  
+  const serviceCategory = document.getElementById("serviceCategory").value;
 
   if (!serviceCategory || !serviceType || !sopAttended || !technician || !userReport || !coordinated) {
     alert("Por favor, complete todos los campos obligatorios.");
@@ -220,7 +222,6 @@ form.addEventListener("submit", function(event) {
   const imei = document.getElementById("imei").value;
   const plate = document.getElementById("plate").value;
   const truperNew = document.getElementById("truperNew").checked;
-  const equipment = document.getElementById("equipment").value;
   const module = document.getElementById("module").value;
   const repSent = document.getElementById("repSent").checked;
   const repSentDate = repSent ? getCurrentDate() : null;
@@ -254,7 +255,7 @@ form.addEventListener("submit", function(event) {
     comments: comments,
     products: selectedProducts // Añadir productos utilizados
   }).then((docRef) => {
-    addServiceToTable(docRef.id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, truperNew, equipment, module, userReport, repSent, coordinated);
+    addServiceToTable(docRef.id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, serviceCategory, userReport, repSent, coordinated);
     modal.style.display = "none";
     
     // Si se seleccionó "Rep Enviado", enviar datos a la página VoBo
@@ -282,7 +283,7 @@ form.addEventListener("submit", function(event) {
 });
 
 // Función para añadir un servicio a la tabla
-function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, truperNew, equipment, module, userReport, repSent, coordinated) {
+function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, serviceCategory, userReport, coordinated, repSent) {
   const table = document.getElementById("servicesTable").getElementsByTagName("tbody")[0];
   const newRow = table.insertRow();
   newRow.setAttribute('data-id', id); // Añade el ID del servicio como un atributo de datos
@@ -294,14 +295,13 @@ function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician
   newRow.insertCell(5).innerText = client;
   newRow.insertCell(6).innerText = imei;
   newRow.insertCell(7).innerText = plate;
-  newRow.insertCell(8).innerText = truperNew ? "Sí" : "No";
-  newRow.insertCell(9).innerText = equipment;
-  newRow.insertCell(10).innerText = module;
-  newRow.insertCell(11).innerText = userReport;
-  newRow.insertCell(12).innerText = coordinated;
-  newRow.insertCell(13).innerText = repSent ? "Sí" : "No";
-  const actionsCell = newRow.insertCell(14);
+  newRow.insertCell(8).innerText = serviceCategory; // Asegúrate de que estos índices coincidan con los de tu tabla actual
+  newRow.insertCell(9).innerText = userReport;
+  newRow.insertCell(10).innerText = coordinated;
+  newRow.insertCell(11).innerText = repSent ? "Sí" : "No";
+  const actionsCell = newRow.insertCell(12); // Corrección aquí, debería ser el siguiente índice después de 'Rep Enviado'
 
+  // Botón Editar
   const editButton = document.createElement('button');
   editButton.className = 'btn-edit';
   const editIcon = document.createElement('span');
@@ -312,6 +312,7 @@ function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician
     openEditModal(id);
   });
 
+  // Botón Eliminar
   const deleteButton = document.createElement('button');
   deleteButton.className = 'btn-delete';
   const deleteIcon = document.createElement('span');
@@ -326,8 +327,9 @@ function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician
   actionsCell.appendChild(deleteButton);
 }
 
+
 // Función para actualizar una fila en la tabla
-function updateTableRow(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, truperNew, equipment, module, userReport, repSent, coordinated) {
+function updateTableRow(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, serviceCategory, userReport, repSent, coordinated) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   row.cells[1].innerText = captureDate;
   row.cells[2].innerText = serviceDate;
@@ -336,12 +338,10 @@ function updateTableRow(id, captureDate, serviceDate, sopAttended, technician, c
   row.cells[5].innerText = client;
   row.cells[6].innerText = imei;
   row.cells[7].innerText = plate;
-  row.cells[8].innerText = truperNew ? "Sí" : "No";
-  row.cells[9].innerText = equipment;
-  row.cells[10].innerText = module;
-  row.cells[11].innerText = userReport;
-  row.cells[12].innerText = coordinated;
-  row.cells[13].innerText = repSent ? "Sí" : "No";
+  row.cells[8].innerText = serviceCategory;
+  row.cells[9].innerText = userReport;
+  row.cells[10].innerText = coordinated;
+  row.cells[11].innerText = repSent ? "Sí" : "No";
 }
 
 // Función para abrir el modal de edición con la información del servicio
@@ -359,7 +359,7 @@ function openEditModal(id) {
       document.getElementById("editImei").value = service.imei;
       document.getElementById("editPlate").value = service.plate;
       document.getElementById("editTruperNew").checked = service.truperNew;
-      document.getElementById("editEquipment").value = service.equipment;
+      document.getElementById("editEquipment").value = service.serviceCategory;
       document.getElementById("editModule").value = service.module;
       document.getElementById("editUserReport").value = service.userReport;
       document.getElementById("editRepSent").checked = service.repSent;
@@ -383,8 +383,7 @@ function openEditModal(id) {
             <option value="Falla accesorio">Falla accesorio</option>
             <option value="Bloqueo movimiento">Bloqueo movimiento</option>
             <option value="Re activación">Re activación</option>
-          </select>
-        `;
+          </select>`;
         editAdditionalFields.appendChild(causaRevGroup);
         document.getElementById("editCausaRev").value = service.causaRev || "";
 
@@ -392,8 +391,7 @@ function openEditModal(id) {
         commentsGroup.className = "input-group revision-comments";
         commentsGroup.innerHTML = `
           <label for="editComments">Comentarios:</label>
-          <textarea id="editComments" name="editComments" rows="4">${service.comments || ""}</textarea>
-        `;
+          <textarea id="editComments" name="editComments" rows="4">${service.comments || ""}</textarea>`;
         editCommentsField.appendChild(commentsGroup);
 
         // Cargar y mostrar productos utilizados
@@ -406,8 +404,7 @@ function openEditModal(id) {
             productItem.className = "product-item";
             productItem.innerHTML = `
               <input type="checkbox" id="edit_product_${product.id}" name="editProducts" value="${product.id}" ${service.products.includes(product.id) ? 'checked' : ''}>
-              <label for="edit_product_${product.id}">${product.name}</label>
-            `;
+              <label for="edit_product_${product.id}">${product.name}</label>`;
             productList.appendChild(productItem);
           });
           editProductListContainer.appendChild(productList);
@@ -425,8 +422,7 @@ function openEditModal(id) {
             <option value="Siniestro">Siniestro</option>
             <option value="Baja Servicio">Baja Servicio</option>
             <option value="Adeudo">Adeudo</option>
-          </select>
-        `;
+          </select>`;
         editAdditionalFields.appendChild(causaDesGroup);
         document.getElementById("editCausaDes").value = service.causaDes || "";
 
@@ -434,8 +430,7 @@ function openEditModal(id) {
         commentsGroup.className = "input-group desinstalacion-comments";
         commentsGroup.innerHTML = `
           <label for="editCommentsDes">Comentarios:</label>
-          <textarea id="editCommentsDes" name="editCommentsDes" rows="4">${service.comments || ""}</textarea>
-        `;
+          <textarea id="editCommentsDes" name="editCommentsDes" rows="4">${service.comments || ""}</textarea>`;
         editCommentsField.appendChild(commentsGroup);
       }
 
@@ -455,7 +450,6 @@ function openEditModal(id) {
   });
 }
 
-// Cargar datos en los desplegables de edición
 function loadEditDropdowns(selectedSopAttended, selectedTechnician, selectedUserReport, selectedCoordinated) {
   const editSopAttendedDropdown = document.getElementById("editSopAttended");
   const editTechnicianDropdown = document.getElementById("editTechnician");
@@ -475,15 +469,13 @@ function loadEditDropdowns(selectedSopAttended, selectedTechnician, selectedUser
       const option = document.createElement("option");
       option.value = user.name;
       option.text = user.name;
-      if (user.name === selectedSopAttended) {
-        option.selected = true;
-      }
       editSopAttendedDropdown.add(option.cloneNode(true));
-      if (user.name === selectedUserReport) {
-        option.selected = true;
-      }
       editUserReportDropdown.add(option);
     });
+
+    // Seleccionar la opción correcta después de que se hayan cargado todas
+    editSopAttendedDropdown.value = selectedSopAttended;
+    editUserReportDropdown.value = selectedUserReport;
   });
 
   // Cargar técnicos en editTechnician
@@ -493,11 +485,11 @@ function loadEditDropdowns(selectedSopAttended, selectedTechnician, selectedUser
       const option = document.createElement("option");
       option.value = technician.name;
       option.text = technician.name;
-      if (technician.name === selectedTechnician) {
-        option.selected = true;
-      }
       editTechnicianDropdown.add(option);
     });
+
+    // Seleccionar la opción correcta después de que se hayan cargado todas
+    editTechnicianDropdown.value = selectedTechnician;
   });
 
   // Cargar opciones en editCoordinated
@@ -506,11 +498,11 @@ function loadEditDropdowns(selectedSopAttended, selectedTechnician, selectedUser
     const option = document.createElement("option");
     option.value = coordinated;
     option.text = coordinated;
-    if (coordinated === selectedCoordinated) {
-      option.selected = true;
-    }
     editCoordinatedDropdown.add(option);
   });
+
+  // Seleccionar la opción correcta después de que se hayan cargado todas
+  editCoordinatedDropdown.value = selectedCoordinated;
 }
 
 // Cargar tipos de servicio en el modal de edición
@@ -540,12 +532,15 @@ editForm.addEventListener("submit", function(event) {
   event.preventDefault();
 
   // Validar que ningún campo select esté en blanco
-  const serviceCategory = document.getElementById("editServiceCategory").value;
+  
   const serviceType = document.getElementById("editServiceType").value;
   const sopAttended = document.getElementById("editSopAttended").value;
   const technician = document.getElementById("editTechnician").value;
+  const equipment = document.getElementById("editEquipment").value;
   const userReport = document.getElementById("editUserReport").value;
   const coordinated = document.getElementById("editCoordinated").value;
+
+  const serviceCategory = document.getElementById("editServiceCategory").value;
 
   if (!serviceCategory || !serviceType || !sopAttended || !technician || !userReport || !coordinated) {
     alert("Por favor, complete todos los campos obligatorios.");
@@ -559,7 +554,6 @@ editForm.addEventListener("submit", function(event) {
   const imei = document.getElementById("editImei").value;
   const plate = document.getElementById("editPlate").value;
   const truperNew = document.getElementById("editTruperNew").checked;
-  const equipment = document.getElementById("editEquipment").value;
   const module = document.getElementById("editModule").value;
   const repSent = document.getElementById("editRepSent").checked;
   const repSentDate = repSent ? getCurrentDate() : null;
@@ -594,7 +588,7 @@ editForm.addEventListener("submit", function(event) {
     products: selectedProducts // Añadir productos utilizados
   }).then(() => {
     // Actualizar la fila en la tabla
-    updateTableRow(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, truperNew, equipment, module, userReport, repSent, coordinated);
+    updateTableRow(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, serviceCategory, userReport, repSent, coordinated);
     
     // Si se seleccionó "Rep Enviado", enviar datos a la página VoBo
     if (repSent) {
@@ -667,9 +661,7 @@ function loadServices(filter = null) {
           service.client,
           service.imei,
           service.plate,
-          service.truperNew,
-          service.equipment,
-          service.module,
+          service.serviceCategory,
           service.userReport,
           service.repSent,
           service.coordinated
@@ -682,7 +674,7 @@ function loadServices(filter = null) {
 }
 
 // Función para añadir un servicio a la tabla
-function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, truperNew, equipment, module, userReport, repSent, coordinated) {
+function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician, client, imei, plate, serviceCategory, userReport, repSent, coordinated) {
   const table = document.getElementById("servicesTable").getElementsByTagName("tbody")[0];
   const newRow = table.insertRow();
   newRow.setAttribute('data-id', id); // Añade el ID del servicio como un atributo de datos
@@ -694,13 +686,11 @@ function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician
   newRow.insertCell(5).innerText = client;
   newRow.insertCell(6).innerText = imei;
   newRow.insertCell(7).innerText = plate;
-  newRow.insertCell(8).innerText = truperNew ? "Sí" : "No";
-  newRow.insertCell(9).innerText = equipment;
-  newRow.insertCell(10).innerText = module;
-  newRow.insertCell(11).innerText = userReport;
-  newRow.insertCell(12).innerText = coordinated;
-  newRow.insertCell(13).innerText = repSent ? "Sí" : "No";
-  const actionsCell = newRow.insertCell(14);
+  newRow.insertCell(8).innerText = serviceCategory; // Cambiado para mostrar serviceCategory en lugar de equipment
+  newRow.insertCell(9).innerText = userReport;
+  newRow.insertCell(10).innerText = coordinated;
+  newRow.insertCell(11).innerText = repSent ? "Sí" : "No";
+  const actionsCell = newRow.insertCell(12);
 
   const editButton = document.createElement('button');
   editButton.className = 'btn-edit';
@@ -725,6 +715,7 @@ function addServiceToTable(id, captureDate, serviceDate, sopAttended, technician
   actionsCell.appendChild(editButton);
   actionsCell.appendChild(deleteButton);
 }
+
 
 // Cargar servicios cuando la página se carga
 document.addEventListener("DOMContentLoaded", function() {
@@ -768,3 +759,5 @@ function removeDataFromVoBo(serviceId) {
     console.error("Error al eliminar datos de VoBo: ", error);
   });
 }
+
+

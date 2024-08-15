@@ -7,12 +7,14 @@ addBtn.onclick = function() {
   // Limpiar los campos del formulario
   document.getElementById("technicianName").value = "";
   document.getElementById("technicianPhone").value = "";
+  document.getElementById("technicianPhone2").value = "";
+  document.getElementById("technicianAddress").value = "";
   document.getElementById("technicianZone").value = "";
+  document.getElementById("technicianComments").value = ""; // Limpiar comentarios
 
   // Mostrar el modal
   addModal.style.display = "block";
 }
-
 
 addSpan.onclick = function() {
   addModal.style.display = "none";
@@ -45,16 +47,17 @@ addForm.addEventListener("submit", function(event) {
 
   const name = document.getElementById("technicianName").value;
   const phone = document.getElementById("technicianPhone").value;
+  const phone2 = document.getElementById("technicianPhone2").value;
+  const address = document.getElementById("technicianAddress").value;
   const zone = document.getElementById("technicianZone").value;
+  const comments = document.getElementById("technicianComments").value; // Capturar comentarios
 
   // Añadir el técnico a Firestore
   db.collection("technicians").add({
-    name: name,
-    phone: phone,
-    zone: zone
+    name, phone, phone2, address, zone, comments // Añadir comentarios al objeto
   }).then((docRef) => {
     // Añadir el técnico a la tabla
-    addTechnicianToTable(docRef.id, name, phone, zone);
+    addTechnicianToTable(docRef.id, name, phone, phone2, zone);
     // Cerrar el modal
     addModal.style.display = "none";
   }).catch((error) => {
@@ -70,19 +73,17 @@ editForm.addEventListener("submit", function(event) {
   const id = document.getElementById("editTechnicianId").value;
   const name = document.getElementById("editTechnicianName").value;
   const phone = document.getElementById("editTechnicianPhone").value;
+  const phone2 = document.getElementById("editTechnicianPhone2").value;
+  const address = document.getElementById("editTechnicianAddress").value;
   const zone = document.getElementById("editTechnicianZone").value;
+  const comments = document.getElementById("editTechnicianComments").value; // Capturar comentarios
 
   // Actualizar el técnico en Firestore
   db.collection("technicians").doc(id).update({
-    name: name,
-    phone: phone,
-    zone: zone
+    name, phone, phone2, address, zone, comments // Añadir comentarios al objeto
   }).then(() => {
     // Actualizar la tabla
-    const row = document.querySelector(`tr[data-id='${id}']`);
-    row.cells[1].innerText = name;
-    row.cells[2].innerText = phone;
-    row.cells[3].innerText = zone;
+    updateTechnicianInTable(id, name, phone, phone2, zone);
     // Cerrar el modal
     editModal.style.display = "none";
   }).catch((error) => {
@@ -91,39 +92,41 @@ editForm.addEventListener("submit", function(event) {
 });
 
 // Función para añadir un técnico a la tabla
-function addTechnicianToTable(id, name, phone, zone) {
+function addTechnicianToTable(id, name, phone, phone2, zone) {
   const table = document.getElementById("techniciansTable").getElementsByTagName("tbody")[0];
   const newRow = table.insertRow();
-  newRow.setAttribute('data-id', id); // Añade el ID del técnico como un atributo de datos
+  newRow.setAttribute('data-id', id);
   newRow.insertCell(0).innerText = table.rows.length;
   newRow.insertCell(1).innerText = name;
   newRow.insertCell(2).innerText = phone;
-  newRow.insertCell(3).innerText = zone;
-  const actionsCell = newRow.insertCell(4);
+  newRow.insertCell(3).innerText = phone2;
+  newRow.insertCell(4).innerText = zone; // Ajusta el índice
+  const actionsCell = newRow.insertCell(5); // Ajusta el índice
+  appendActions(actionsCell, id);
+}
 
-  // Botón Editar
+// Función para actualizar un técnico en la tabla
+function updateTechnicianInTable(id, name, phone, phone2, zone) {
+  const row = document.querySelector(`tr[data-id='${id}']`);
+  row.cells[1].innerText = name;
+  row.cells[2].innerText = phone;
+  row.cells[3].innerText = phone2;
+  row.cells[4].innerText = zone; // Ajusta el índice
+}
+
+// Función para añadir botones de acciones
+function appendActions(cell, id) {
   const editButton = document.createElement('button');
   editButton.className = 'btn-edit';
-  const editIcon = document.createElement('span');
-  editIcon.className = 'material-icons-outlined';
-  editIcon.innerText = 'edit';
-  editButton.appendChild(editIcon);
-  editButton.addEventListener('click', function() {
-    openEditModal(id);
-  });
-  actionsCell.appendChild(editButton);
+  editButton.innerHTML = '<span class="material-icons-outlined">edit</span>';
+  editButton.onclick = () => openEditModal(id);
+  cell.appendChild(editButton);
 
-  // Botón Eliminar
   const deleteButton = document.createElement('button');
   deleteButton.className = 'btn-delete';
-  const deleteIcon = document.createElement('span');
-  deleteIcon.className = 'material-icons-outlined';
-  deleteIcon.innerText = 'delete';
-  deleteButton.appendChild(deleteIcon);
-  deleteButton.addEventListener('click', function() {
-    deleteTechnician(id, newRow);
-  });
-  actionsCell.appendChild(deleteButton);
+  deleteButton.innerHTML = '<span class="material-icons-outlined">delete</span>';
+  deleteButton.onclick = () => deleteTechnician(id);
+  cell.appendChild(deleteButton);
 }
 
 // Función para abrir el modal de edición con la información actual
@@ -134,7 +137,10 @@ function openEditModal(id) {
       document.getElementById("editTechnicianId").value = id;
       document.getElementById("editTechnicianName").value = technician.name;
       document.getElementById("editTechnicianPhone").value = technician.phone;
+      document.getElementById("editTechnicianPhone2").value = technician.phone2;
+      document.getElementById("editTechnicianAddress").value = technician.address;
       document.getElementById("editTechnicianZone").value = technician.zone;
+      document.getElementById("editTechnicianComments").value = technician.comments || ""; // Cargar comentarios
       editModal.style.display = "block";
     }
   }).catch((error) => {
@@ -143,11 +149,10 @@ function openEditModal(id) {
 }
 
 // Función para eliminar un técnico
-function deleteTechnician(id, row) {
+function deleteTechnician(id) {
   if (confirm("¿Estás seguro de que quieres eliminar este técnico?")) {
     db.collection("technicians").doc(id).delete().then(() => {
-      row.remove(); // Elimina la fila de la tabla
-      console.log("Técnico eliminado con éxito");
+      document.querySelector(`tr[data-id='${id}']`).remove();
     }).catch((error) => {
       console.error("Error al eliminar el técnico: ", error);
     });
@@ -156,19 +161,16 @@ function deleteTechnician(id, row) {
 
 // Cargar los técnicos de Firebase Firestore y mostrarlos en la tabla
 function loadTechnicians() {
-  db.collection("technicians").get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const technician = doc.data();
-        addTechnicianToTable(doc.id, technician.name, technician.phone, technician.zone); // Pasa el ID del documento
-      });
-    })
-    .catch((error) => {
-      console.error("Error al obtener los técnicos: ", error);
+  db.collection("technicians").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const technician = doc.data();
+      // No pasamos el 'address' ni 'comments' a la función de la tabla
+      addTechnicianToTable(doc.id, technician.name, technician.phone, technician.phone2, technician.zone);
     });
+  }).catch((error) => {
+    console.error("Error al obtener los técnicos: ", error);
+  });
 }
 
 // Cargar los técnicos al cargar la página
-window.onload = function() {
-  loadTechnicians();
-};
+window.onload = loadTechnicians;

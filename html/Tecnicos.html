@@ -113,6 +113,7 @@
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Teléfono</th>
+                <th>Teléfono 2</th>
                 <th>Zona</th>
                 <th>Acciones</th>
               </tr>
@@ -142,8 +143,20 @@
             <input type="tel" id="technicianPhone" name="technicianPhone" required>
           </div>
           <div class="input-group">
+            <label for="technicianPhone2">Teléfono 2:</label>
+            <input type="tel" id="technicianPhone2" name="technicianPhone2">
+        </div>
+        <div class="input-group">
+            <label for="technicianAddress">Dirección:</label>
+            <input type="text" id="technicianAddress" name="technicianAddress">
+        </div>
+          <div class="input-group">
             <label for="technicianZone">Zona:</label>
             <input type="text" id="technicianZone" name="technicianZone" required>
+          </div>
+          <div class="input-group">
+            <label for="technicianComments">Comentarios:</label>
+            <textarea id="technicianComments" name="technicianComments" rows="4"></textarea>
           </div>
           <button type="submit" class="btn">Añadir</button>
         </form>
@@ -166,8 +179,20 @@
             <input type="tel" id="editTechnicianPhone" name="editTechnicianPhone" required>
           </div>
           <div class="input-group">
+            <label for="editTechnicianPhone2">Teléfono 2:</label>
+            <input type="tel" id="editTechnicianPhone2" name="editTechnicianPhone2">
+        </div>
+        <div class="input-group">
+            <label for="editTechnicianAddress">Dirección:</label>
+            <input type="text" id="editTechnicianAddress" name="editTechnicianAddress">
+        </div>
+          <div class="input-group">
             <label for="editTechnicianZone">Zona:</label>
             <input type="text" id="editTechnicianZone" name="editTechnicianZone" required>
+          </div>
+          <div class="input-group">
+            <label for="editTechnicianComments">Comentarios:</label>
+            <textarea id="editTechnicianComments" name="editTechnicianComments" rows="4"></textarea>
           </div>
           <button type="submit" class="btn">Guardar cambios</button>
         </form>
@@ -181,7 +206,7 @@
     <script src="../js/firebase-config.js"></script>
     <script src="../js/tecnicos.js"></script>
     <script src="../js/roles.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/authManager.js"></script>
     <script src="../js/search.js"></script> <!-- Archivo JS para la búsqueda -->
   </body>
 </html>
